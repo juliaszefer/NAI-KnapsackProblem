@@ -42,8 +42,8 @@ def check_weights(number_arr, _knapsack):
     for i in number_arr:
         weights_sum += int(_knapsack.weights[i])
         if weights_sum > int(_knapsack.k):
-            return False
-    return True
+            return False, weights_sum
+    return True, weights_sum
 
 
 def sum_values(number_arr, _knapsack):
@@ -56,18 +56,20 @@ def sum_values(number_arr, _knapsack):
 def find_best(_possibilities, _knapsack):
     best = BestOne(0, 0)
     for i in range(_possibilities):
-        print(f"\nIteration number: {i}\n")
         tmp_arr = list()
         binary = int_to_binary(i, int(_knapsack.n))
         binary_list = list(binary)
         for j in range(len(binary_list)):
             if int(binary_list[j]) == 1:
                 tmp_arr.append(j)
-        if check_weights(tmp_arr, _knapsack):
+        does_it_fit, summ_weights = check_weights(tmp_arr, _knapsack)
+        if does_it_fit:
             current = BestOne(binary, sum_values(tmp_arr, _knapsack))
             if int(current.value) >= int(best.value):
                 best = current
-        print(f"\nBest one so far: {best.binar}\n")
+                print(f"\nIteration number: {i}\n")
+                print(f"\nBest one so far: {best.binar}, with the value: {best.value}\n"
+                      f"Weight: {summ_weights}/{_knapsack.k}\n")
     return best
 
 
